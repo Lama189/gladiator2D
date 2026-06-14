@@ -5,7 +5,7 @@
 class Entity
 {
 public:
-    virtual ~Entity() = default;
+    virtual ~Entity() {};
 
     virtual void update(float dt) = 0;
     virtual void draw() = 0;
@@ -13,6 +13,11 @@ public:
     Rectangle getHitbox() const
     {
         return hitbox;
+    }
+
+    Vector2 getPosition() const
+    {
+        return position;
     }
     
     bool alive() const

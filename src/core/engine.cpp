@@ -21,7 +21,7 @@ void Engine::init()
     InitWindow(WINDOW_W, WINDOW_H, "Gladiator");
 
     Vector2 playerPos = {400.f, 300.f};
-    player = std::make_unique<Player>(playerPos, 60.f, WINDOW_W, WINDOW_H);
+    world.addEntity(std::make_unique<Player>(world, playerPos, 60.f, WINDOW_W, WINDOW_H));
 }
 
 void Engine::mainLoop()
@@ -30,7 +30,7 @@ void Engine::mainLoop()
     {
         deltaTime = GetFrameTime();
 
-        player->update(deltaTime);
+        world.update(deltaTime);
 
         BeginDrawing();
             ClearBackground(RAYWHITE);
@@ -38,8 +38,10 @@ void Engine::mainLoop()
             const char* fpsText = 0;
             fpsText = TextFormat("FPS: (%i)", GetFPS());
 
+            for (auto& entity : world.getEntities())
+                entity->draw();
+
             DrawText(fpsText, 0, 0, 20, GREEN);
-            player->draw();
         EndDrawing();
     }
 }

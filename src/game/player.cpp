@@ -1,9 +1,11 @@
 #include "game/player.hpp"
+#include "core/world.hpp"
 
-Player::Player(const Vector2& pos, float vel, int screenW, int screenH)
-    : speed(vel)
+Player::Player(World& w, const Vector2& pos, float vel, int screenW, int screenH)
+    :  world(w), speed(vel)
 {
     this->position = pos;
+    this->isAlive = true;
 
     const float HITBOX_WIDTH = 40.f;
     const float HITBOX_HEIGHT = 80.f;
@@ -29,6 +31,16 @@ void Player::draw()
     DrawRectanglePro(hitbox, center, 0.f, BLACK);
 }
 
+Vector2& Player::getCenter()
+{
+    return center;
+}
+
+World& Player::getWorldFromPlayer()
+{
+    return world;
+}
+
 void Player::input(float dt)
 {
     float currentSpeed = speed;
@@ -39,6 +51,12 @@ void Player::input(float dt)
     if (IsKeyDown(KEY_S)) position.y += currentSpeed * dt;
     if (IsKeyDown(KEY_A)) position.x -= currentSpeed * dt;
     if (IsKeyDown(KEY_D)) position.x += currentSpeed * dt;
+
+    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) 
+    {
+        Sword testSword;
+        testSword.attack(*this);
+    }
 
     hitbox.x = position.x;
     hitbox.y = position.y;

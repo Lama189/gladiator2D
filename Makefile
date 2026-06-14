@@ -1,6 +1,6 @@
 LIBS = -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 CXX = clang++ 
-CXXFLAGS = -std=c++17 -Wall -Iinclude
+CXXFLAGS = -std=c++20 -Wall -Iinclude
 
 SRC_DIR = src
 OBJ_DIR = obj

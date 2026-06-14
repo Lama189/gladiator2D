@@ -1,8 +1,11 @@
 #pragma once
 
 #include <memory>
+#include <vector>
+#include "core/world.hpp"
 
 class Player;
+class Entity;
 
 class Engine
 {
@@ -13,7 +16,7 @@ public:
     void run();
 
 private:
-    std::unique_ptr<Player> player;
+    World world;
 
     float deltaTime;
 
