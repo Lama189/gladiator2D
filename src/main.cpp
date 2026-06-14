@@ -1,23 +1,18 @@
 #include <iostream>
-#include "raylib.h"
+#include "core/engine.hpp"
 
 int main()
 {
-    const int WINDOW_W = 800;
-    const int WINDOW_H = 600;
+    Engine game;
 
-    InitWindow(WINDOW_W, WINDOW_H, "Gladiator");
-
-    while (!WindowShouldClose())
+    try
     {
-        BeginDrawing();
-            ClearBackground(RAYWHITE);
-
-            DrawText("Hi!", 400, 300, 20, BLACK);
-        EndDrawing();
+        game.run();
     }
-
-    CloseWindow();
-
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+    }
+    
     return 0;
 }
