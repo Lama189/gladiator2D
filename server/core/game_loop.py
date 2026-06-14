@@ -16,13 +16,18 @@ class GameLoop:
 
     async def start(self, sock: socket.socket) -> None:
         self.sock = sock
+        last_time = asyncio.get_event_loop().time()
         while True:
             await asyncio.sleep(self.tick_interval)
-            self._tick()
+            now = asyncio.get_event_loop().time()
+            dt = now - last_time
+            last_time = now
+            self._tick(dt)
 
     def on_connect(self, addr: tuple) -> None:
         player_id = f"{addr[0]}:{addr[1]}"
-        self.players[addr] = Player(player_id, x=400.0, y=300.0)
+        x = 300.0 if len(self.players) == 0 else 500.0
+        self.players[addr] = Player(player_id, x=x, y=300.0)
         self.inputs[addr] = {}
 
         response = pack({
@@ -45,9 +50,7 @@ class GameLoop:
             self.inputs[addr] = keys
 
 
-    def _tick(self) -> None:
-        dt = self.tick_interval
-
+    def _tick(self, dt: float) -> None:
         for addr, player in self.players.items():
             player.apply_input(self.inputs.get(addr, {}), dt)
 
@@ -58,8 +61,6 @@ class GameLoop:
                 for player in self.players.values()
             }
         })
-
-        # print(f"Sending state: {state}")
 
         for addr in self.players:
             self.sock.sendto(state, addr)

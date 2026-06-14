@@ -85,17 +85,27 @@ void Engine::mainLoop()
         {
             if (id == playerId) continue;
             DrawRectangle(
-                static_cast<int>(ps.x),
-                static_cast<int>(ps.y),
+                static_cast<int>(ps.x) - 10,
+                static_cast<int>(ps.y) - 20,
                 20, 40,
                 RED
             );
+
+            DrawText(TextFormat("MY POS: %.1f %.1f",
+                                lastState.players[playerId].x,
+                                lastState.players[playerId].y), 0, 20, 20, BLUE);
+
+            for (auto& [id, ps] : lastState.players)
+            {
+                if (id == playerId) continue;
+                DrawText(TextFormat("OTHER POS: %.1f %.1f", ps.x, ps.y), 0, 40, 20, RED);
+            }
         }
 
         EndMode2D();
 
-        const char* fpsText = TextFormat("FPS: (%i)", GetFPS());
-        DrawText(fpsText, 0, 0, 20, GREEN);
+        //const char* fpsText = TextFormat("FPS: (%i)", GetFPS());
+        //DrawText(fpsText, 0, 0, 20, GREEN);
 
         EndDrawing();
     }
