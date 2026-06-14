@@ -21,6 +21,9 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
+clean:
+	rm -rf $(OBJ_DIR) $(TARGET)
+
 run: all
 	./$(TARGET)
 

@@ -1,8 +1,10 @@
 #include "game/player.hpp"
 
 Player::Player(const Vector2& pos, float vel, int screenW, int screenH)
-    : position(pos), speed(vel)
+    : speed(vel)
 {
+    this->position = pos;
+
     const float HITBOX_WIDTH = 40.f;
     const float HITBOX_HEIGHT = 80.f;
     hitbox = {position.x, position.y, HITBOX_WIDTH / 2.f, HITBOX_HEIGHT / 2.f};
@@ -13,11 +15,8 @@ Player::Player(const Vector2& pos, float vel, int screenW, int screenH)
     camera.offset = {static_cast<float>(screenW / 2), static_cast<float>(screenH / 2)};
     camera.rotation = 0.f;
     camera.zoom = 1.f;
-}
 
-Player::~Player()
-{
-    
+    id = 0;
 }
 
 void Player::update(float dt)

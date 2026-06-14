@@ -1,25 +1,26 @@
 #pragma once
 
-#include "raylib.h"
+#include "core/entity.hpp"
+#include <cstdint>
 
-class Player
+class Player : public Entity
 {
 public:
     Player(const Vector2& pos, float vel, int screenW, int screenH);
-    ~Player();
+    ~Player() override = default;
+    
+    void update(float dt) override;
+    void draw() override;
 
-    void update(float dt);
-    void draw();
+    Vector2& getCenter();
     
 private:
     Camera2D camera;
-
-    Rectangle hitbox;
     
-    Vector2 position;
     Vector2 center;
 
     float speed = 0.f;
+    uint8_t id; // will need in future 
     
     void input(float dt);
 };
