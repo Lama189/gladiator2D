@@ -32,10 +32,14 @@ void Player::draw()
 
 void Player::input(float dt)
 {
-    if (IsKeyDown(KEY_W)) position.y -= speed * dt;
-    if (IsKeyDown(KEY_S)) position.y += speed * dt;
-    if (IsKeyDown(KEY_A)) position.x -= speed * dt;
-    if (IsKeyDown(KEY_D)) position.x += speed * dt;
+    float currentSpeed = speed;
+    if (IsKeyDown(KEY_LEFT_SHIFT) || IsKeyDown(KEY_RIGHT_SHIFT))
+        currentSpeed *= 2.f;
+
+    if (IsKeyDown(KEY_W)) position.y -= currentSpeed * dt;
+    if (IsKeyDown(KEY_S)) position.y += currentSpeed * dt;
+    if (IsKeyDown(KEY_A)) position.x -= currentSpeed * dt;
+    if (IsKeyDown(KEY_D)) position.x += currentSpeed * dt;
 
     hitbox.x = position.x;
     hitbox.y = position.y;
