@@ -1,28 +1,36 @@
 #include "game/player.hpp"
 
-Player::Player(const Vector2& pos, float vel, int screenW, int screenH)
-    : position(pos), speed(vel)
+Player::Player(const Vector2& pos, int screenW, int screenH): position(pos)
 {
     const float HITBOX_WIDTH = 40.f;
     const float HITBOX_HEIGHT = 80.f;
     hitbox = {position.x, position.y, HITBOX_WIDTH / 2.f, HITBOX_HEIGHT / 2.f};
-
     center = {hitbox.width / 2.f, hitbox.height / 2.f};
-
     camera.target = {position.x + center.x, position.y + center.y};
     camera.offset = {static_cast<float>(screenW / 2), static_cast<float>(screenH / 2)};
     camera.rotation = 0.f;
     camera.zoom = 1.f;
+    previousPosition = pos;
+    serverPosition = pos;
 }
 
 Player::~Player()
 {
-    
+
 }
 
 void Player::update(float dt)
 {
-    input(dt);
+    timeSinceUpdate += dt;
+    float alpha = timeSinceUpdate / TICK_INTERVAL;
+    if (alpha > 1.f) alpha = 1.f;
+
+    position.x = previousPosition.x + (serverPosition.x - previousPosition.x) * alpha;
+    position.y = previousPosition.y + (serverPosition.y - previousPosition.y) * alpha;
+
+    hitbox.x = position.x;
+    hitbox.y = position.y;
+    // camera.target = {position.x + center.x, position.y + center.y};
 }
 
 void Player::draw()
@@ -30,17 +38,9 @@ void Player::draw()
     DrawRectanglePro(hitbox, center, 0.f, BLACK);
 }
 
-void Player::input(float dt)
+void Player::setServerPosition(const Vector2& pos)
 {
-    float currentSpeed = speed;
-    if (IsKeyDown(KEY_LEFT_SHIFT) || IsKeyDown(KEY_RIGHT_SHIFT))
-        currentSpeed *= 2.f;
-
-    if (IsKeyDown(KEY_W)) position.y -= currentSpeed * dt;
-    if (IsKeyDown(KEY_S)) position.y += currentSpeed * dt;
-    if (IsKeyDown(KEY_A)) position.x -= currentSpeed * dt;
-    if (IsKeyDown(KEY_D)) position.x += currentSpeed * dt;
-
-    hitbox.x = position.x;
-    hitbox.y = position.y;
+    previousPosition = position;
+    serverPosition = pos;
+    timeSinceUpdate = 0.f;
 }

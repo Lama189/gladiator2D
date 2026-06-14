@@ -59,5 +59,7 @@ class GameLoop:
             }
         })
 
+        # print(f"Sending state: {state}")
+
         for addr in self.players:
             self.sock.sendto(state, addr)
