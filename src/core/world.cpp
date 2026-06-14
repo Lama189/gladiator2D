@@ -13,11 +13,23 @@ void World::update(float dt)
             return !e->alive();
         }
     ), entities.end());
+
+    for (auto& e : pendingAdd)
+        entities.push_back(std::move(e));
+
+    pendingAdd.clear();
 }
+
+void World::render()
+{
+    for (auto& entity : entities)
+        entity->draw();
+}
+
 
 void World::addEntity(std::unique_ptr<Entity> e)
 {
-    entities.push_back(std::move(e));
+    pendingAdd.push_back(std::move(e));
 }
 
 const std::vector<std::unique_ptr<Entity>>& World::getEntities() const

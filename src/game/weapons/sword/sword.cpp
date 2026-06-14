@@ -6,7 +6,7 @@
 
 void Sword::attack(Player& owner)
 {
-    auto attack = std::make_unique<SwordAttack>(owner.getPosition(), 20.f, 20.f);
+    auto attack = std::make_unique<SwordAttack>(owner);
 
     // CAN BE A BAD IDEA
     owner.getWorldFromPlayer().addEntity(std::move(attack));

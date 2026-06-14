@@ -1,6 +1,7 @@
 #include "raylib.h"
 #include "core/engine.hpp"
 #include "game/player.hpp"
+#include "game/dummy.hpp"
 
 static constexpr int WINDOW_W = 800;
 static constexpr int WINDOW_H = 600;
@@ -22,6 +23,7 @@ void Engine::init()
 
     Vector2 playerPos = {400.f, 300.f};
     world.addEntity(std::make_unique<Player>(world, playerPos, 60.f, WINDOW_W, WINDOW_H));
+    world.addEntity(std::make_unique<Dummy>(Vector2{500.f, 300.f}));
 }
 
 void Engine::mainLoop()
@@ -38,8 +40,7 @@ void Engine::mainLoop()
             const char* fpsText = 0;
             fpsText = TextFormat("FPS: (%i)", GetFPS());
 
-            for (auto& entity : world.getEntities())
-                entity->draw();
+            world.render();
 
             DrawText(fpsText, 0, 0, 20, GREEN);
         EndDrawing();

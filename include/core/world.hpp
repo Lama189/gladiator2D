@@ -9,6 +9,7 @@ class World
 {
 public:
     void update(float dt);
+    void render();
 
     void addEntity(std::unique_ptr<Entity> e);
 
@@ -16,4 +17,5 @@ public:
 
 private:
     std::vector<std::unique_ptr<Entity>> entities;
+    std::vector<std::unique_ptr<Entity>> pendingAdd;
 };

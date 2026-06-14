@@ -15,18 +15,22 @@ public:
     void update(float dt) override;
     void draw() override;
 
-    Vector2& getCenter();
+    Vector2 getCenter();
+    Vector2& getDirection();
+
     World& getWorldFromPlayer();
     
 private:
     World& world; // maybe bad idea
+    Sword testSword;
 
     Camera2D camera;
     
-    Vector2 center;
+    Vector2 center{0, 0};
+    Vector2 dir{0, 0};
 
     float speed = 0.f;
-    uint8_t id; // will need in future 
+    uint8_t id = 0; // will need in future 
     
     void input(float dt);
 };
