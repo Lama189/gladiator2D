@@ -1,5 +1,4 @@
 #include "game/player.hpp"
-#include "core/world.hpp"
 
 Player::Player(World& w, const Vector2& pos, float vel, int screenW, int screenH)
     :  world(w), speed(vel)
@@ -39,9 +38,9 @@ void Player::draw()
     DrawRectanglePro(hitbox, center, 0.f, BLACK);
 }
 
-Vector2 Player::getCenter() 
+Vector2 Player::getCenter()
 {
-    return {position.x + hitbox.width / 2.f, position.y + hitbox.height / 2.f};
+    return { position.x + hitbox.width / 2.f, position.y + hitbox.height / 2.f };
 }
 
 Vector2& Player::getDirection()

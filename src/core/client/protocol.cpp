@@ -120,7 +120,7 @@ namespace Protocol
         return buf;
     }
 
-    std::vector<uint8_t> encodeInput(bool up, bool down, bool left, bool right, bool sprint) 
+    std::vector<uint8_t> encodeInput(bool up, bool down, bool left, bool right, bool sprint, bool attack) 
     {
         std::vector<uint8_t> buf;
         writeFixMap(buf, 2);
@@ -129,12 +129,13 @@ namespace Protocol
         writeInt(buf, 3);
         writeFixStr(buf, "keys");
         
-        writeFixMap(buf, 5);
+        writeFixMap(buf, 6);
         writeFixStr(buf, "up");     writeBool(buf, up);
         writeFixStr(buf, "down");   writeBool(buf, down);
         writeFixStr(buf, "left");   writeBool(buf, left);
         writeFixStr(buf, "right");  writeBool(buf, right);
         writeFixStr(buf, "sprint"); writeBool(buf, sprint);
+        writeFixStr(buf, "attack"); writeBool(buf, attack);
         return buf;
     }
 

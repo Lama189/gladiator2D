@@ -28,12 +28,7 @@ void Engine::init()
     player = std::make_unique<Player>(world, playerPos, 60.f, WINDOW_W, WINDOW_H);
     world.addEntity(std::make_unique<Dummy>(Vector2{500.f, 300.f}));
 
-    client = std::make_unique<UDPClient>();
-    if (client->connect(SERVER_HOST, SERVER_PORT))
-    {
-        auto connectPacket = Protocol::encodeConnect();
-        client->send(connectPacket);
-    }
+    network.init();
 }
 
 void Engine::mainLoop()
@@ -42,38 +37,7 @@ void Engine::mainLoop()
     {
         deltaTime = GetFrameTime();
 
-        auto inputPacket = Protocol::encodeInput(
-            IsKeyDown(KEY_W),
-            IsKeyDown(KEY_S),
-            IsKeyDown(KEY_A),
-            IsKeyDown(KEY_D),
-            IsKeyDown(KEY_LEFT_SHIFT) || IsKeyDown(KEY_RIGHT_SHIFT)
-        );
-        client->send(inputPacket);
-        std::vector<uint8_t> recvBuf;
-        std::string lastPlayerId;
-
-        while (client->receive(recvBuf))
-        {
-            if (Protocol::decodePacket(recvBuf.data(), recvBuf.size(), lastState, lastPlayerId))
-            {
-                if (!connected && !lastPlayerId.empty())
-                {
-                    playerId = lastPlayerId;
-                    player->setPlayerId(playerId);
-                    connected = true;
-                }
-            }
-        }
-
-        if (connected)
-        {
-            auto it = lastState.players.find(playerId);
-            if (it != lastState.players.end())
-            {
-                player->setServerPosition({it->second.x, it->second.y});
-            }
-        }
+        network.update(deltaTime, *player);
 
         player->update(deltaTime);
         world.update(deltaTime);    
@@ -88,27 +52,26 @@ void Engine::mainLoop()
 
             player->draw();
 
-            for (auto& [id, ps] : lastState.players)
+            const auto& state = network.getLastState();
+            const auto selfIt = state.players.find(network.getPlayerId());
+            if (selfIt != state.players.end())
             {
-                if (id == playerId) continue;
+                DrawText(TextFormat("MY POS: %.1f %.1f",
+                                    selfIt->second.x,
+                                    selfIt->second.y), 0, 20, 20, BLUE);
+            }
+
+            for (auto& [id, ps] : state.players)
+            {
+                if (id == network.getPlayerId()) continue;
                 DrawRectangle(
                     static_cast<int>(ps.x) - 10,
                     static_cast<int>(ps.y) - 20,
                     20, 40,
                     RED
                 );
-
-                DrawText(TextFormat("MY POS: %.1f %.1f",
-                                    lastState.players[playerId].x,
-                                    lastState.players[playerId].y), 0, 20, 20, BLUE);
-
-                for (auto& [id, ps] : lastState.players)
-                {
-                    if (id == playerId) continue;
-                    DrawText(TextFormat("OTHER POS: %.1f %.1f", ps.x, ps.y), 0, 40, 20, RED);
-                }
+                DrawText(TextFormat("OTHER POS: %.1f %.1f", ps.x, ps.y), 0, 40, 20, RED);
             }
-
 
             world.render();
 
@@ -121,6 +84,8 @@ void Engine::mainLoop()
 
 void Engine::cleanup()
 {
+    network.cleanup();
+
     world.cleanup();
     CloseWindow();
 }
