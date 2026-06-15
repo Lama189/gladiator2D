@@ -17,13 +17,21 @@ Player::Player(World& w, const Vector2& pos, float vel, int screenW, int screenH
     camera.offset = {static_cast<float>(screenW / 2), static_cast<float>(screenH / 2)};
     camera.rotation = 0.f;
     camera.zoom = 1.f;
-
-    id = 0;
 }
 
 void Player::update(float dt)
 {
-    input(dt);
+    // input(dt);
+
+    timeSinceUpdate += dt;
+    float alpha = timeSinceUpdate / TICK_INTERVAL;
+    if (alpha > 1.f) alpha = 1.f;
+
+    position.x = oldPosition.x + (serverPos.x - oldPosition.x) * alpha;
+    position.y = oldPosition.y + (serverPos.y - oldPosition.y) * alpha;
+
+    hitbox.x = position.x;
+    hitbox.y = position.y;
 }
 
 void Player::draw()
@@ -45,6 +53,8 @@ World& Player::getWorldFromPlayer()
 {
     return world;
 }
+
+
 
 void Player::input(float dt)
 {
@@ -72,4 +82,11 @@ void Player::input(float dt)
 
     hitbox.x = position.x;
     hitbox.y = position.y;
+}
+
+void Player::setServerPosition(const Vector2& pos)
+{
+    oldPosition = position;
+    serverPos = pos;
+    timeSinceUpdate = 0.f;
 }

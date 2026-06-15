@@ -27,6 +27,9 @@ public:
     }
 
 protected:
+    Vector2 oldPosition{0, 0};
+    Vector2 serverPos{0, 0};
+
     Vector2 position{0, 0};
 
     Rectangle hitbox{};

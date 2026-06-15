@@ -3,6 +3,7 @@
 #include "core/entity.hpp"
 #include "game/weapons/sword/sword.hpp"
 #include <cstdint>
+#include <string>
 
 class World;
 
@@ -15,12 +16,18 @@ public:
     void update(float dt) override;
     void draw() override;
 
-    void hurt(int damage) override;
+    void hurt(int damage) override { }
+
+    Camera2D getCamera() { return camera; }
 
     Vector2 getCenter();
     Vector2& getDirection();
 
     World& getWorldFromPlayer();
+
+    void setServerPosition(const Vector2& pos);
+    void setPlayerId(const std::string& pId) { id = pId; }
+    const std::string& getPlayerId() const { return id; }
     
 private:
     World& world; // maybe bad idea
@@ -32,7 +39,11 @@ private:
     Vector2 dir{0, 0};
 
     float speed = 0.f;
-    uint8_t id = 0; // will need in future 
+
+    float timeSinceUpdate = 0.f;
+    static constexpr float TICK_INTERVAL = 1.f / 20.f;
+
+    std::string id; // will need in future 
     
     void input(float dt);
 };
