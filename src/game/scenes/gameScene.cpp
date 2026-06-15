@@ -12,9 +12,12 @@ void GameScene::init(SceneManager& sManager)
     manager = &sManager;
 
     Vector2 playerPos = {400.f, 300.f};
-    localPlayer = std::make_unique<Player>(world, playerPos, 60.f, WINDOW_W, WINDOW_H);
+    auto player = std::make_unique<Player>(world, playerPos, 60.f, WINDOW_W, WINDOW_H);
+
+    localPlayer = player.get();
     localPlayer->setNetworked(false);
 
+    world.addEntity(std::move(player));
     world.addEntity(std::make_unique<Dummy>(Vector2{500.f, 300.f}));
 
     if (mode == GameMode::MULTIPLAYER)
@@ -74,7 +77,10 @@ void GameScene::draw()
 
 void GameScene::cleanup()
 {
+    localPlayer = nullptr;
+    
     if (mode == GameMode::MULTIPLAYER)
         network.cleanup();
+
     world.cleanup();
 }

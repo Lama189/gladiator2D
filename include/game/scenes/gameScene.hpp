@@ -27,6 +27,6 @@ private:
     GameMode mode;
 
     World world;
-    std::unique_ptr<Player> localPlayer;
+    Player* localPlayer = nullptr;
     NetworkManager network;
 };
