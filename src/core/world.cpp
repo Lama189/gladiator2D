@@ -26,6 +26,11 @@ void World::render()
         entity->draw();
 }
 
+void World::cleanup()
+{
+    entities.clear();
+    pendingAdd.clear();
+}
 
 void World::addEntity(std::unique_ptr<Entity> e)
 {

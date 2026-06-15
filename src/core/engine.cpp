@@ -49,5 +49,6 @@ void Engine::mainLoop()
 
 void Engine::cleanup()
 {
+    world.cleanup();
     CloseWindow();
 }

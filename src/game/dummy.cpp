@@ -1,4 +1,5 @@
 #include "game/dummy.hpp"
+#include <iostream>
 
 Dummy::Dummy(Vector2 pos)
 {
@@ -14,6 +15,8 @@ Dummy::Dummy(Vector2 pos)
     };
 
     isAlive = true;
+
+    health = 100;
 }
 
 Dummy::~Dummy()
@@ -23,10 +26,21 @@ Dummy::~Dummy()
 
 void Dummy::update(float dt) 
 {
-    // nothing
+    if (!isAlive)
+        return;
 }
 
 void Dummy::draw()
 {
     DrawTexture(texture, position.x, position.y, WHITE);
+}
+
+void Dummy::hurt(int damage)
+{
+    health -= damage;
+
+    std::cout << "Get Hurt!" << "\n";
+
+    if (health <= 0)
+        isAlive = false;
 }

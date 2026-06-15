@@ -11,6 +11,8 @@ public:
     void update(float dt);
     void render();
 
+    void cleanup();
+
     void addEntity(std::unique_ptr<Entity> e);
 
     const std::vector<std::unique_ptr<Entity>>& getEntities() const;

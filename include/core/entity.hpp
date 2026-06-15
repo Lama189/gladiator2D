@@ -9,6 +9,7 @@ public:
 
     virtual void update(float dt) = 0;
     virtual void draw() = 0;
+    virtual void hurt(int damage) = 0;
 
     Rectangle getHitbox() const
     {

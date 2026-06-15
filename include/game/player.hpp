@@ -15,6 +15,8 @@ public:
     void update(float dt) override;
     void draw() override;
 
+    void hurt(int damage) override;
+
     Vector2 getCenter();
     Vector2& getDirection();
 
