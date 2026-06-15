@@ -2,11 +2,7 @@
 
 #include <memory>
 #include <vector>
-#include "core/world.hpp"
-#include "core/networkManager.hpp"
-
-class Player;
-class Entity;
+#include "core/sceneManager.hpp"
 
 class Engine
 {
@@ -17,11 +13,7 @@ public:
     void run();
 
 private:
-    World world;
-    NetworkManager network;
-    std::unique_ptr<Player> player;
-
-
+    SceneManager sceneManager;
     float deltaTime;
 
     void init();

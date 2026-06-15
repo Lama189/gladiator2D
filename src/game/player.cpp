@@ -20,14 +20,15 @@ Player::Player(World& w, const Vector2& pos, float vel, int screenW, int screenH
 
 void Player::update(float dt)
 {
-    // input(dt);
+    if (networked)
+    {
+        timeSinceUpdate += dt;
+        float alpha = timeSinceUpdate / TICK_INTERVAL;
+        if (alpha > 1.f) alpha = 1.f;
 
-    timeSinceUpdate += dt;
-    float alpha = timeSinceUpdate / TICK_INTERVAL;
-    if (alpha > 1.f) alpha = 1.f;
-
-    position.x = oldPosition.x + (serverPos.x - oldPosition.x) * alpha;
-    position.y = oldPosition.y + (serverPos.y - oldPosition.y) * alpha;
+        position.x = oldPosition.x + (serverPos.x - oldPosition.x) * alpha;
+        position.y = oldPosition.y + (serverPos.y - oldPosition.y) * alpha;
+    }
 
     hitbox.x = position.x;
     hitbox.y = position.y;
@@ -52,8 +53,6 @@ World& Player::getWorldFromPlayer()
 {
     return world;
 }
-
-
 
 void Player::input(float dt)
 {

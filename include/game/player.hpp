@@ -16,6 +16,8 @@ public:
     void update(float dt) override;
     void draw() override;
 
+    void input(float dt);
+    
     void hurt(int damage) override { }
 
     Camera2D getCamera() { return camera; }
@@ -27,6 +29,7 @@ public:
 
     void setServerPosition(const Vector2& pos);
     void setPlayerId(const std::string& pId) { id = pId; }
+    void setNetworked(bool value) { networked = value; }
     const std::string& getPlayerId() const { return id; }
     
 private:
@@ -44,6 +47,5 @@ private:
     static constexpr float TICK_INTERVAL = 1.f / 20.f;
 
     std::string id; // will need in future 
-    
-    void input(float dt);
+    bool networked;
 };
