@@ -3,6 +3,10 @@
 Player::Player(World& w, const Vector2& pos, float vel, int screenW, int screenH)
     :  world(w), speed(vel)
 {
+    playerTexture = LoadTexture("assets/TestPlayer.png");
+    playerTexture.width *= 2;
+    playerTexture.height *= 2;
+
     this->position = pos;
     this->isAlive = true;
 
@@ -36,7 +40,12 @@ void Player::update(float dt)
 
 void Player::draw()
 {
-    DrawRectanglePro(hitbox, center, 0.f, BLACK);
+    DrawTexture(playerTexture, position.x - playerTexture.width / 2.f, position.y - playerTexture.height / 2.f, BLUE);
+}
+
+void Player::drawServerPlayer(const Texture2D& playerTexture, float sX, float sY, Color color)
+{
+    DrawTexture(playerTexture, sX - playerTexture.width / 2.f, sY - playerTexture.height / 2.f, color);
 }
 
 Vector2 Player::getCenter()
@@ -52,6 +61,11 @@ Vector2& Player::getDirection()
 World& Player::getWorldFromPlayer()
 {
     return world;
+}
+
+Texture2D& Player::getPlayerTexture()
+{
+    return playerTexture;
 }
 
 void Player::input(float dt)

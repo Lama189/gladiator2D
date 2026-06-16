@@ -11,10 +11,12 @@ class Player : public Entity
 {
 public:
     Player(World& w, const Vector2& pos, float vel, int screenW, int screenH);
-    ~Player() override = default;
+    ~Player() override { UnloadTexture(playerTexture); };
     
     void update(float dt) override;
     void draw() override;
+
+    static void drawServerPlayer(const Texture2D& playerTexture, float sX, float sY, Color color);
 
     void input(float dt);
     
@@ -24,6 +26,7 @@ public:
 
     Vector2 getCenter();
     Vector2& getDirection();
+    Texture2D& getPlayerTexture();
 
     World& getWorldFromPlayer();
 
@@ -33,6 +36,8 @@ public:
     const std::string& getPlayerId() const { return id; }
     
 private:
+    Texture playerTexture;
+
     World& world; // maybe bad idea
     Sword testSword;
 

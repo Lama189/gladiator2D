@@ -14,6 +14,8 @@ void GameScene::init(SceneManager& sManager)
     Vector2 playerPos = {400.f, 300.f};
     auto player = std::make_unique<Player>(world, playerPos, 60.f, WINDOW_W, WINDOW_H);
 
+    tempTexture = &player->getPlayerTexture();
+
     localPlayer = player.get();
     localPlayer->setNetworked(false);
 
@@ -32,12 +34,10 @@ void GameScene::update(float dt)
     if (mode == GameMode::MULTIPLAYER)
         network.update(dt, *localPlayer);
         
-    localPlayer->update(dt);
-        
+    world.update(dt);
+
     if (mode == GameMode::SINGLE_PLAYER)
         localPlayer->input(dt);
-        
-    world.update(dt);
 }
 
 void GameScene::draw()
@@ -62,12 +62,7 @@ void GameScene::draw()
         for (auto& [id, ps] : state.players)
         {
             if (id == network.getPlayerId()) continue;
-            DrawRectangle(
-                static_cast<int>(ps.x) - 10,
-                static_cast<int>(ps.y) - 20,
-                20, 40,
-                RED
-            );
+            Player::drawServerPlayer(*tempTexture, ps.x, ps.y, RED);
             DrawText(TextFormat("OTHER POS: %.1f %.1f", ps.x, ps.y), 0, 40, 20, RED);
         }   
     }
@@ -78,7 +73,8 @@ void GameScene::draw()
 void GameScene::cleanup()
 {
     localPlayer = nullptr;
-    
+    tempTexture = nullptr;
+
     if (mode == GameMode::MULTIPLAYER)
         network.cleanup();
 

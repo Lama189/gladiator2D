@@ -28,5 +28,8 @@ private:
 
     World world;
     Player* localPlayer = nullptr;
+
+    Texture2D* tempTexture;
+
     NetworkManager network;
 };
