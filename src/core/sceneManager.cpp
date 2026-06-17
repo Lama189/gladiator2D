@@ -1,9 +1,9 @@
 #include "core/sceneManager.hpp"
 
-void SceneManager::change(std::unique_ptr<Scene> scene)
+void SceneManager::change(std::unique_ptr<Scene> scene, AssetManager& assets)
 {
     currentScene = std::move(scene);
-    currentScene->init(*this);
+    currentScene->init(*this, assets);
 }
 
 void SceneManager::update(float dt)

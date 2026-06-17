@@ -3,6 +3,8 @@
 #include <memory>
 #include <vector>
 #include "core/sceneManager.hpp"
+#include "core/assetManager.hpp"
+
 
 class Engine
 {
@@ -14,6 +16,7 @@ public:
 
 private:
     SceneManager sceneManager;
+    AssetManager assetManager;
     float deltaTime;
 
     void init();

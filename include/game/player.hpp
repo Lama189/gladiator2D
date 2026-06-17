@@ -7,16 +7,22 @@
 
 class World;
 
+enum class AnimationState
+{
+    Idle,
+    Run,
+};
+
 class Player : public Entity
 {
 public:
-    Player(World& w, const Vector2& pos, float vel, int screenW, int screenH);
-    ~Player() override { UnloadTexture(playerTexture); };
+    Player(Texture2D& texture, World& w, const Vector2& pos, float vel, int screenW, int screenH);
+    ~Player() override { };
     
     void update(float dt) override;
     void draw() override;
 
-    static void drawServerPlayer(const Texture2D& playerTexture, float sX, float sY, Color color);
+    static void drawServerPlayer(Texture2D& playerTexture, float sX, float sY, Color color);
 
     void input(float dt);
     
@@ -25,8 +31,6 @@ public:
     Camera2D getCamera() { return camera; }
 
     Vector2 getCenter();
-    Vector2& getDirection();
-    Texture2D& getPlayerTexture();
 
     World& getWorldFromPlayer();
 
@@ -36,7 +40,7 @@ public:
     const std::string& getPlayerId() const { return id; }
     
 private:
-    Texture playerTexture;
+    Texture2D* playerTexture;
 
     World& world; // maybe bad idea
     Sword testSword;
@@ -44,7 +48,11 @@ private:
     Camera2D camera;
     
     Vector2 center{0, 0};
-    Vector2 dir{0, 0};
+    Vector2 velocity{0, 0};
+
+    AnimationState currentState = AnimationState::Idle;
+    int currentFrame = 0;
+    float animTimer = 0.f;
 
     float speed = 0.f;
 
@@ -52,5 +60,6 @@ private:
     static constexpr float TICK_INTERVAL = 1.f / 20.f;
 
     std::string id; // will need in future 
+    bool isFacingLeft = false;;
     bool networked;
 };

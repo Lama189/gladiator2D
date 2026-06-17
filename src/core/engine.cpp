@@ -26,7 +26,9 @@ void Engine::init()
 {
     InitWindow(WINDOW_W, WINDOW_H, "Gladiator");
 
-    sceneManager.change(std::make_unique<MenuScene>());
+    assetManager.init("assets/");
+
+    sceneManager.change(std::make_unique<MenuScene>(), assetManager);
 }
 
 void Engine::mainLoop()
@@ -47,6 +49,7 @@ void Engine::mainLoop()
 
 void Engine::cleanup()
 {
+    assetManager.cleanup();
     sceneManager.cleanup();
     CloseWindow();
 }

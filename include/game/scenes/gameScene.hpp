@@ -16,7 +16,7 @@ class GameScene : public Scene
 public:
     GameScene(GameMode mode);
 
-    void init(SceneManager& sManager) override;
+    void init(SceneManager& sManager, AssetManager& assets) override;
     void cleanup() override;
     
     void update(float dt) override;
@@ -28,8 +28,6 @@ private:
 
     World world;
     Player* localPlayer = nullptr;
-
-    Texture2D* tempTexture;
 
     NetworkManager network;
 };

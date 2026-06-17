@@ -30,11 +30,27 @@ void World::cleanup()
 {
     entities.clear();
     pendingAdd.clear();
+    playerById.clear();
 }
 
 void World::addEntity(std::unique_ptr<Entity> e)
 {
     pendingAdd.push_back(std::move(e));
+}
+
+void World::registerPlayer(const std::string& id, Player* player)
+{
+    playerById[id] = player;
+}
+
+Player* World::getPlayerByID(const std::string& id)
+{
+    auto it = playerById.find(id);
+    
+    if (it != playerById.end())
+        return it->second;
+
+    return nullptr;
 }
 
 const std::vector<std::unique_ptr<Entity>>& World::getEntities() const

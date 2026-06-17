@@ -3,8 +3,9 @@
 #include "game/scenes/gameScene.hpp"
 #include "raylib.h"
 
-void MenuScene::init(SceneManager& sManager) 
+void MenuScene::init(SceneManager& sManager, AssetManager& assets) 
 { 
+    assetManager = &assets;
     manager = &sManager; 
 
     singlePlayerButton = { {300, 200, 200, 50}, "Single player" };
@@ -19,12 +20,12 @@ void MenuScene::update(float dt)
     {
         if (CheckCollisionPointRec(mouse, singlePlayerButton.rect))
         {
-            manager->change(std::make_unique<GameScene>(GameMode::SINGLE_PLAYER));
+            manager->change(std::make_unique<GameScene>(GameMode::SINGLE_PLAYER), *assetManager);
         }
 
         if (CheckCollisionPointRec(mouse, multiPlayerButton.rect))
         {
-            manager->change(std::make_unique<GameScene>(GameMode::MULTIPLAYER));
+            manager->change(std::make_unique<GameScene>(GameMode::MULTIPLAYER), *assetManager);
         }
     }
 }

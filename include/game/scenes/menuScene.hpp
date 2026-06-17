@@ -6,7 +6,7 @@
 class MenuScene : public Scene
 {
 public:
-    void init(SceneManager& sManager) override;
+    void init(SceneManager& sManager, AssetManager& assets) override;
     void cleanup() override { }
 
     void update(float dt) override;
